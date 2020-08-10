@@ -13,11 +13,19 @@
 #' @import purrr
 #'
 #' @export
-sing_day <- function(dataset, line, phrase_col){
+sing_day <- function(dataset, line, phrase_col) {
+  phrases <- dataset %>%
+    pull({{ phrase_col }}) %>%
+    .[line:1]
 
-  phrases <- dataset %>% pull({{phrase_col}})
+  if (line > 1) {
+    phrases[line] <- str_glue("and {phrases[line]}")
+  }
 
-  #????
+  day <- dataset[line, 2]
+  str_glue("On the {day} day of Christmas, my true love sent to me,") %>% cat()
 
-
+  map(phrases, paste) %>%
+    str_c(collapse = "\n") %>%
+    cat()
 }

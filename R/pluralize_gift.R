@@ -10,11 +10,18 @@
 #' @import purrr
 #'
 #' @export
-pluralize_gift <- function(gift){
+pluralize_gift <- function(gift) {
+  special1 <- gift %>% str_detect("oo")
+  special2 <- gift %>% str_detect("y$")
+  len <- 2:length(gift)
 
-gift <- gift %>%
-  str_replace()
+  gift[len] <- paste0(gift[len], "s")
+  gift[special1] <- gift[special1] %>%
+    str_replace("oo", "ee") %>%
+    str_replace("s$", "")
+  gift[special2] <- gift[special2] %>%
+    str_replace("s$", "") %>%
+    str_replace("y$", "ies")
 
-return(gift)
-
+  return(gift)
 }
